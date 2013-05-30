@@ -1,0 +1,10 @@
+{
+	"name": "EBNF-Lint",
+	"description": "EBNF syntax checker",
+	"dependencies": {
+		"pegjs": "*"
+	},
+	"engines": {
+		"node": ">= 0.4"
+	}
+}
