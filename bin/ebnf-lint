@@ -1,0 +1,40 @@
+#!/usr/bin/env node
+
+var program = require('commander');
+var fs = require('fs');
+
+program
+	.version('0.0.1')
+	.usage('[options] file')
+	.option('-g, --generate-ebnf', 'Generate EBNF from AST')
+.parse(process.argv);
+
+if(program.args[0].length == 0) {
+	console.error("You must specify an input EBNF file.");
+	process.exit(1);	
+}
+
+if(!fs.existsSync(program.args[0])) {
+	console.error(program.args[0] + " doesn't exist.");
+	process.exit(2);
+}
+
+var parser  = require('../lib/parser');
+
+var data = fs.readFileSync(program.args[0], {encoding: 'utf8'});
+var ast = parser.parse(data);
+console.log(ast);
+console.error("Successfully parsed! Checking for errors.");
+/*var errors = require('../lib/sanitychecker')(ast);
+if(errors > 0) {
+	console.error(errors+' errors detected.')
+}*/
+
+if(program.generateEbnf) {
+	console.error("Generating EBNF.");
+	var ebnf_generator = require('../lib/ebnf-generator');
+
+	console.log(ebnf_generator.generate(ast));
+	console.error("Done.");	
+}
+
