@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
 var program = require('commander');
-var fs = require('fs');
+var fs = require('fs')
+   ,util = require('util');
 var SanityChecker = require('../lib/sanitychecker');
 
 program
@@ -23,25 +24,34 @@ if(!fs.existsSync(program.args[0])) {
 var parser  = require('../lib/parser');
 
 var data = fs.readFileSync(program.args[0], {encoding: 'utf8'});
-var ast = parser.parse(data);
+try {
+	var ast = parser.parse(data);
 
-var problems = new SanityChecker(ast).check();
 
-if(problems.length > 0) {
-	problems.forEach(function(problem) {
-		console.error(problem.message);
-	});
+	var problems = new SanityChecker(ast).check();
+
+	if(problems.length > 0) {
+		problems.forEach(function(problem) {
+			console.error(problem.message);
+		});
+	}
+	var errors = problems.filter(function(e) { return e.level == "error"; });
+	var warnings = problems.filter(function(e) { return e.level == "warning"; });
+
+	console.error(errors.length+' errors and '+warnings.length+' warnings detected.');
+
+	if(program.generateEbnf && errors.length == 0) {
+		console.error("Generating EBNF.");
+		var ebnf_generator = require('../lib/ebnf-generator');
+
+		console.log(ebnf_generator.generate(ast));
+		console.error("Done.");	
+	}
+
+} catch(error) {
+	if(error instanceof parser.SyntaxError) {
+		console.error(util.format("%d:%d: Parse error: %s", error.line, error.column,error.message));
+	} else {
+		console.error("Unknown error.");
+	}
 }
-var errors = problems.filter(function(e) { return e.level == "error"; });
-var warnings = problems.filter(function(e) { return e.level == "warning"; });
-
-console.error(errors.length+' errors and '+warnings.length+' warnings detected.');
-
-if(program.generateEbnf && errors.length == 0) {
-	console.error("Generating EBNF.");
-	var ebnf_generator = require('../lib/ebnf-generator');
-
-	console.log(ebnf_generator.generate(ast));
-	console.error("Done.");	
-}
-
