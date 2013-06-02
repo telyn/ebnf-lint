@@ -49,9 +49,10 @@ try {
 	}
 
 } catch(error) {
-	if(error instanceof parser.SyntaxError) {
+	if(error.name == "SyntaxError") {
 		console.error(util.format("%d:%d: Parse error: %s", error.line, error.column,error.message));
 	} else {
 		console.error("Unknown error.");
+		throw error;
 	}
 }
