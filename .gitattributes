@@ -1,0 +1,3 @@
+*.js text
+*.pegjs text
+bin/ebnf-lint text
