@@ -1,7 +1,7 @@
 {
 	"name": "EBNF-Lint",
 	"description": "EBNF syntax checker",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"dependencies": {
 		"commander": "1.1.*"
 	},
@@ -14,7 +14,7 @@
 		"node": ">= 0.4"
 	},
 	"scripts": {
-		"test": "mocha -R list",
+		"test": "mocha",
 		"compile": "pegjs --track-line-and-column lib/parser.pegjs lib/parser.js"
 	}
 }

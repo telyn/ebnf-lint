@@ -11,7 +11,7 @@ identifier = letter , { letter | digit | " " } ;
 terminal = "'" , character , { character } , "'" 
          | '"' , character , { character } , '"' ;
 
-lhs = identifier ;
+
 rhs = identifier
      | terminal
      | "[" , rhs , "]"
@@ -19,6 +19,8 @@ rhs = identifier
      | "(" , rhs , ")"
      | rhs , "|" , rhs
      | rhs , "," , rhs ;
+     
+lhs = identifier;
 
 rule = lhs , "=" , rhs , ";" ;
 grammar = { rule } ;

@@ -2,6 +2,7 @@
 
 var program = require('commander');
 var fs = require('fs');
+var SanityChecker = require('../lib/sanitychecker');
 
 program
 	.version('0.0.1')
@@ -9,7 +10,7 @@ program
 	.option('-g, --generate-ebnf', 'Generate EBNF from AST')
 .parse(process.argv);
 
-if(program.args[0].length == 0) {
+if(program.args.length == 0 || program.args[0].length == 0) {
 	console.error("You must specify an input EBNF file.");
 	process.exit(1);	
 }
@@ -23,14 +24,20 @@ var parser  = require('../lib/parser');
 
 var data = fs.readFileSync(program.args[0], {encoding: 'utf8'});
 var ast = parser.parse(data);
-console.log(ast);
-console.error("Successfully parsed! Checking for errors.");
-/*var errors = require('../lib/sanitychecker')(ast);
-if(errors > 0) {
-	console.error(errors+' errors detected.')
-}*/
 
-if(program.generateEbnf) {
+var problems = new SanityChecker(ast).check();
+
+if(problems.length > 0) {
+	problems.forEach(function(problem) {
+		console.error(problem.message);
+	});
+}
+var errors = problems.filter(function(e) { return e.level == "error"; });
+var warnings = problems.filter(function(e) { return e.level == "warning"; });
+
+console.error(errors.length+' errors and '+warnings.length+' warnings detected.');
+
+if(program.generateEbnf && errors.length == 0) {
 	console.error("Generating EBNF.");
 	var ebnf_generator = require('../lib/ebnf-generator');
 
