@@ -3,12 +3,12 @@
 	"description": "EBNF syntax checker",
 	"version": "0.0.4",
 	"dependencies": {
-		"commander": "1.1.*"
+		"commander": "~1"
 	},
 	"devDependencies": {
-		"mocha": "1.10.*",
-		"pegjs": "0.7.*",
-		"should": "1.2.*"
+		"mocha": "~1.10",
+		"pegjs": "~0.7",
+		"should": "~1.2"
 	},
 	"engines": {
 		"node": ">= 0.4"
