@@ -3,15 +3,15 @@
 	"description": "EBNF syntax checker",
 	"version": "0.0.4",
 	"dependencies": {
-		"commander": "~1"
+		"commander": "~2.0"
 	},
 	"devDependencies": {
-		"mocha": "~1.10",
+		"mocha": "~3.1",
 		"pegjs": "~0.8",
-		"should": "~1.2"
+		"should": "~11.1"
 	},
 	"engines": {
-		"node": ">= 0.4"
+		"node": ">= 0.10"
 	},
 	"scripts": {
 		"test": "mocha",
