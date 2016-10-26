@@ -1,9 +1,9 @@
 var should = require('should');
 var fs = require('fs');
 
-var parser = require('../lib/parser')
-   ,generator = require('../lib/ebnf-generator')
-   ,SanityChecker = require('../lib/sanitychecker.js');
+var parser = require('../lib/parser'),
+   generator = require('../lib/ebnf-generator'),
+   SanityChecker = require('../lib/sanitychecker.js');
 
 describe('Parser', function() {
 	it('should correctly parse simple grammars');
